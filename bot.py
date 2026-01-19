@@ -10,7 +10,22 @@ bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
 
 # ========== ПУТЬ К PDF ФАЙЛУ ==========
-PDF_FILE_PATH = "harry_potter_chapter1.pdf"
+import os
+# Пробуем несколько возможных путей
+possible_paths = [
+    "/tmp/harry_potter_chapter1.pdf",
+    os.path.join(os.getcwd(), "harry_potter_chapter1.pdf"),
+    "harry_potter_chapter1.pdf"
+]
+
+for path in possible_paths:
+    if os.path.exists(path):
+        PDF_FILE_PATH = path
+        print(f"✅ Найден PDF: {path}")
+        break
+else:
+    PDF_FILE_PATH = "/tmp/harry_potter_chapter1.pdf"
+    print(f"⚠️ PDF не найден, буду использовать: {PDF_FILE_PATH}")
 
 # ========== ПРОВЕРКА ПОДПИСКИ ==========
 async def check_subscription(user_id: int) -> bool:
@@ -236,4 +251,5 @@ async def main():
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
+
     asyncio.run(main())
