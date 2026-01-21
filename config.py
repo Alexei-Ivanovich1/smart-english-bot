@@ -8,15 +8,15 @@ load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 # Ваш Telegram канал для привлечения подписчиков
-# ЗАМЕНИТЕ на username вашего реального канала (начинается с @)
-CHANNEL_USERNAME = "@englishpro77"  # ← ЗАМЕНИТЕ ЭТО!
+CHANNEL_USERNAME = "@englishpro77"  
 
 # ID вашего канала (можно получить через бота @username_to_id_bot)
-# Пока оставьте пустым, позже получите
-CHANNEL_ID = -1001154836567  # ← ПОТОМ ЗАМЕНИТЕ
+CHANNEL_ID_STR = os.getenv("CHANNEL_ID", "-1001154836567")
+CHANNEL_ID = int(CHANNEL_ID_STR) if CHANNEL_ID_STR else -1001154836567
 
 # Ваш Telegram ID (для админ-команд)
-ADMIN_ID = 349307908  # Ваш ID
+ADMIN_ID_STR = os.getenv("ADMIN_ID", "349307908")
+ADMIN_ID = int(ADMIN_ID_STR) if ADMIN_ID_STR else 349307908
 
 # Настройки базы данных
-DATABASE_URL = "sqlite:///english_bot.db"
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///english_bot.db")

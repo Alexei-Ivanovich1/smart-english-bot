@@ -1,6 +1,22 @@
 import os
+from flask import Flask
+from threading import Thread
 from datetime import datetime
 from aiogram import Bot, Dispatcher, types
+
+# Создаем Flask приложение
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Smart English Bot is running!"
+
+def run_flask():
+    """Запускает Flask сервер в отдельном потоке"""
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port, debug=False, use_reloader=False)
+
+# === ДАЛЕЕ ВАШ СУЩЕСТВУЮЩИЙ КОД ===
 from aiogram.filters import Command
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 import asyncio
@@ -10,12 +26,12 @@ bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
 
 # ========== ПУТЬ К PDF ФАЙЛУ ==========
-import os
 # Пробуем несколько возможных путей
 possible_paths = [
     "/tmp/harry_potter_chapter1.pdf",
     os.path.join(os.getcwd(), "harry_potter_chapter1.pdf"),
-    "harry_potter_chapter1.pdf"
+    "harry_potter_chapter1.pdf",
+    "/opt/render/project/src/harry_potter_chapter1.pdf",
 ]
 
 for path in possible_paths:
@@ -233,6 +249,10 @@ async def main():
     print("🤖 Бот 'Smart English Bot' запускается...")
     print(f"🕐 Время запуска: {datetime.now()}")
     print("=" * 50)
+
+    flask_thread = Thread(target=run_flask, daemon=True)
+    flask_thread.start()
+    print("🌐 Flask сервер запущен на порту 5000")
     
     print(f"📁 Проверяю PDF файл: {PDF_FILE_PATH}")
     print(f"📁 Абсолютный путь: {os.path.abspath(PDF_FILE_PATH)}")
@@ -251,5 +271,4 @@ async def main():
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
-
     asyncio.run(main())
